@@ -1,0 +1,15 @@
+# NileConnect Frontend — Streamlit Requirements
+# Phase 1: UI without AI features
+
+# --- UI Framework ---
+streamlit==1.36.0
+
+# --- HTTP Client (calls FastAPI backend) ---
+httpx==0.27.0
+requests==2.32.3
+
+# --- Configuration ---
+python-dotenv==1.0.1
+
+# --- Utilities ---
+pandas==2.2.2
