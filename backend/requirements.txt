@@ -41,3 +41,6 @@ httpx==0.27.0
 
 # --- Telephony ---
 twilio==9.3.0
+
+#---login needs---
+bcrypt==4.0.1

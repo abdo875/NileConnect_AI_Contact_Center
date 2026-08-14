@@ -1,12 +1,3 @@
-"""
-TwiML response builders.
-
-Each function returns a ready-to-send TwiML (XML) string. FastAPI webhook
-routes should return these directly with media_type="application/xml".
-
-Keeping all TwiML construction here (rather than inline in webhook routes)
-means the call script/wording lives in exactly one place.
-"""
 from twilio.twiml.voice_response import VoiceResponse, Gather
 
 # Twilio's Arabic (Egypt) voice + language code.

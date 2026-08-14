@@ -1,10 +1,3 @@
-"""
-Twilio REST client wrapper.
-
-Provides a single, lazily-initialized Twilio Client instance built from
-app settings, so the rest of the telephony module never touches
-credentials or the twilio SDK directly.
-"""
 from functools import lru_cache
 from twilio.rest import Client
 from app.core.config import settings
