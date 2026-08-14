@@ -3,6 +3,19 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from app.api.routes import (
+    auth,
+    users,
+    customers,
+    cases,
+    calls,
+    followups,
+    documents,
+    reports,
+    audit_logs,
+    health,
+)
+from app.telephony.webhooks import incoming as telephony_incoming
 
 from app.core.config import settings
 from app.core.logging import setup_logging, logger
@@ -73,7 +86,7 @@ app.include_router(followups.router,  prefix=PREFIX, tags=["Follow-ups"])
 app.include_router(documents.router,  prefix=PREFIX, tags=["Documents"])
 app.include_router(reports.router,    prefix=PREFIX, tags=["Reports"])
 app.include_router(audit_logs.router, prefix=PREFIX, tags=["Audit Logs"])
-
+app.include_router(telephony_incoming.router, prefix=PREFIX, tags=["Telephony"])
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
