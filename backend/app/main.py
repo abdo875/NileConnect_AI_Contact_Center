@@ -15,7 +15,12 @@ from app.api.routes import (
     audit_logs,
     health,
 )
-from app.telephony.webhooks import incoming as telephony_incoming
+from app.telephony.webhooks import (
+    incoming as telephony_incoming,
+    speech as telephony_speech,
+    status as telephony_status,
+    telegram as telephony_telegram,
+)
 
 from app.core.config import settings
 from app.core.logging import setup_logging, logger
@@ -87,6 +92,9 @@ app.include_router(documents.router,  prefix=PREFIX, tags=["Documents"])
 app.include_router(reports.router,    prefix=PREFIX, tags=["Reports"])
 app.include_router(audit_logs.router, prefix=PREFIX, tags=["Audit Logs"])
 app.include_router(telephony_incoming.router, prefix=PREFIX, tags=["Telephony"])
+app.include_router(telephony_speech.router,   prefix=PREFIX, tags=["Telephony"])
+app.include_router(telephony_status.router,   prefix=PREFIX, tags=["Telephony"])
+app.include_router(telephony_telegram.router, prefix=PREFIX, tags=["Telephony"])
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
