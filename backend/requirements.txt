@@ -5,6 +5,7 @@ psycopg2-binary==2.9.10
 alembic==1.14.0
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
 python-multipart==0.0.20
 pydantic==2.10.3
 pydantic[email]==2.10.3
@@ -15,3 +16,5 @@ python-dotenv==1.0.1
 aiofiles==24.1.0
 pytest==8.3.4
 pytest-asyncio==0.24.0
+# AI packages are intentionally excluded here.
+# Install them via:  pip install -r ai_requirements.txt  (into ai_venv)

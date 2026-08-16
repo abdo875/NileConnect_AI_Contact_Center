@@ -110,6 +110,17 @@ elif current_page == "documents":
     from pages.documents import show
     show()
 
+elif current_page == "ai_assistant":
+    from pages.ai_assistant import show
+    show()
+
+elif current_page == "knowledge_base":
+    if is_admin():
+        from pages.knowledge_base import show
+        show()
+    else:
+        st.error("🚫 Access Denied")
+
 elif current_page == "users":
     if is_admin():
         from pages.users import show

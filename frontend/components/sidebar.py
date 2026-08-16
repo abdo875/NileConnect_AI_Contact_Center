@@ -38,7 +38,9 @@ def render_sidebar() -> str:
                 "cases": "📋 Cases",
                 "calls": "📞 Calls",
                 "followups": "🔔 Follow-ups",
-                "documents": "📚 Knowledge Base",
+                "ai_assistant": "🤖 AI Assistant",
+                "knowledge_base": "📚 Knowledge Base",
+                "documents": "📄 Documents",
                 "users": "⚙️ Users",
                 "reports": "📈 Reports",
                 "audit_logs": "🔍 Audit Logs",
@@ -50,6 +52,7 @@ def render_sidebar() -> str:
                 "cases": "📋 Cases",
                 "calls": "📞 Calls",
                 "followups": "🔔 Follow-ups",
+                "ai_assistant": "🤖 AI Assistant",
             }
 
         # Initialize selected page

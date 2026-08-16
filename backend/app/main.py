@@ -19,6 +19,7 @@ from app.api.routes import (
     reports,
     audit_logs,
     health,
+    ai,
 )
 
 
@@ -28,18 +29,39 @@ async def lifespan(app: FastAPI):
     setup_logging()
     logger.info("Starting NileConnect AI Contact Center backend...")
 
-    # Ensure upload directory exists
-    upload_dir = settings.UPLOAD_DIR
+    # Ensure upload directory exists (uses absolute path, independent of CWD)
+    upload_dir = settings.upload_dir_abs
     os.makedirs(upload_dir, exist_ok=True)
-    logger.info(f"Upload directory: {os.path.abspath(upload_dir)}")
+    logger.info(f"Upload directory: {upload_dir}")
+
+    # Ensure RAG docs directory exists
+    rag_dir = settings.rag_docs_dir_abs
+    os.makedirs(rag_dir, exist_ok=True)
+    logger.info(f"RAG docs directory: {rag_dir}")
 
     # Create database tables
     create_all_tables()
     logger.info("Database tables ready.")
 
+    # ── Pre-warm RAG index in background so the server starts fast ────────────
+    def _warm_rag() -> None:
+        try:
+            from app.ai.rag.pipeline import rag
+            logger.info("RAG: starting index build at startup...")
+            rag.build()
+            logger.info(
+                "RAG: startup build complete — %d chunks indexed.", rag.document_count
+            )
+        except Exception as exc:
+            logger.error("RAG: startup build failed: %s", exc)
+
+    import threading
+    threading.Thread(target=_warm_rag, daemon=True, name="rag-startup").start()
+
     yield
 
     logger.info("Backend shutting down.")
+
 
 
 app = FastAPI(
@@ -73,6 +95,7 @@ app.include_router(followups.router,  prefix=PREFIX, tags=["Follow-ups"])
 app.include_router(documents.router,  prefix=PREFIX, tags=["Documents"])
 app.include_router(reports.router,    prefix=PREFIX, tags=["Reports"])
 app.include_router(audit_logs.router, prefix=PREFIX, tags=["Audit Logs"])
+app.include_router(ai.router,        prefix=PREFIX, tags=["AI Assistant"])
 
 
 @app.exception_handler(Exception)
