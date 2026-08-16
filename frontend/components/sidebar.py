@@ -34,6 +34,7 @@ def render_sidebar() -> str:
         if is_admin():
             pages = {
                 "dashboard": "📊 Dashboard",
+                "success_metrics": "🏆 Success Metrics",
                 "customers": "👥 Customers",
                 "cases": "📋 Cases",
                 "calls": "📞 Calls",

@@ -37,6 +37,8 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:8501"
     BACKEND_HOST: str = "0.0.0.0"
     BACKEND_PORT: int = 8000
+    # Public base URL used by Twilio webhooks — set to your ngrok/tunnel URL in production
+    PUBLIC_BASE_URL: str = "http://localhost:8000"
 
     # ── AI / LLM ──────────────────────────────────────────────────────────────
     GROQ_API_KEY: str = ""

@@ -135,6 +135,13 @@ elif current_page == "reports":
     else:
         st.error("🚫 Access Denied")
 
+elif current_page == "success_metrics":
+    if is_admin():
+        from pages.success_metrics import show
+        show()
+    else:
+        st.error("🚫 Access Denied")
+
 elif current_page == "audit_logs":
     if is_admin():
         from pages.audit_logs import show

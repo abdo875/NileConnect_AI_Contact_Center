@@ -3,18 +3,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.api.routes import (
-    auth,
-    users,
-    customers,
-    cases,
-    calls,
-    followups,
-    documents,
-    reports,
-    audit_logs,
-    health,
-)
 from app.telephony.webhooks import incoming as telephony_incoming
 
 from app.core.config import settings
@@ -33,6 +21,7 @@ from app.api.routes import (
     audit_logs,
     health,
     ai,
+    success_metrics,
 )
 
 
@@ -98,17 +87,20 @@ app.add_middleware(
 # ── Routers ────────────────────────────────────────────────────────────────────
 PREFIX = "/api/v1"
 
-app.include_router(health.router,     prefix=PREFIX, tags=["Health"])
-app.include_router(auth.router,       prefix=PREFIX, tags=["Authentication"])
-app.include_router(users.router,      prefix=PREFIX, tags=["Users"])
-app.include_router(customers.router,  prefix=PREFIX, tags=["Customers"])
-app.include_router(cases.router,      prefix=PREFIX, tags=["Cases"])
-app.include_router(calls.router,      prefix=PREFIX, tags=["Calls"])
-app.include_router(followups.router,  prefix=PREFIX, tags=["Follow-ups"])
-app.include_router(documents.router,  prefix=PREFIX, tags=["Documents"])
-app.include_router(reports.router,    prefix=PREFIX, tags=["Reports"])
-app.include_router(audit_logs.router, prefix=PREFIX, tags=["Audit Logs"])
-app.include_router(ai.router,        prefix=PREFIX, tags=["AI Assistant"])
+app.include_router(health.router,              prefix=PREFIX, tags=["Health"])
+app.include_router(auth.router,               prefix=PREFIX, tags=["Authentication"])
+app.include_router(users.router,              prefix=PREFIX, tags=["Users"])
+app.include_router(customers.router,          prefix=PREFIX, tags=["Customers"])
+app.include_router(cases.router,              prefix=PREFIX, tags=["Cases"])
+app.include_router(calls.router,              prefix=PREFIX, tags=["Calls"])
+app.include_router(followups.router,          prefix=PREFIX, tags=["Follow-ups"])
+app.include_router(documents.router,          prefix=PREFIX, tags=["Documents"])
+app.include_router(reports.router,            prefix=PREFIX, tags=["Reports"])
+app.include_router(audit_logs.router,         prefix=PREFIX, tags=["Audit Logs"])
+app.include_router(ai.router,                prefix=PREFIX, tags=["AI Assistant"])
+app.include_router(telephony_incoming.router, prefix=PREFIX, tags=["Telephony"])
+app.include_router(success_metrics.router,    prefix=PREFIX, tags=["Success Metrics"])
+
 
 
 @app.exception_handler(Exception)

@@ -7,6 +7,7 @@ AI routes:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 
 from fastapi import APIRouter, Depends
@@ -42,13 +43,19 @@ class RagStatusResponse(BaseModel):
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @router.post("/ask", response_model=AskResponse)
-def ask(
+async def ask(
     body: AskRequest,
     current_user: User = Depends(get_current_user),
 ) -> AskResponse:
-    """Ask the AI agent a question. The agent will decide which tools to use."""
+    """
+    Ask the AI agent a question.
+
+    Runs the blocking agent loop in a thread-pool worker so uvicorn's
+    async event loop is never blocked — this prevents timeouts on other
+    concurrent requests while one long-running agent call is in flight.
+    """
     logger.info("AI ask from user=%s: %s", current_user.email, body.question[:100])
-    answer = ask_agent(body.question)
+    answer = await asyncio.to_thread(ask_agent, body.question)
     return AskResponse(answer=answer)
 
 
