@@ -19,8 +19,9 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
 
     # Database
-    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/nileconnect"
-
+    # DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/nileconnect"
+    # Database
+    DATABASE_URL: str
     # JWT
     SECRET_KEY: str = "change-me-to-a-long-random-secret-key"
     ALGORITHM: str = "HS256"

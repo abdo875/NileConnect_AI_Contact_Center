@@ -3,6 +3,19 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from app.api.routes import (
+    auth,
+    users,
+    customers,
+    cases,
+    calls,
+    followups,
+    documents,
+    reports,
+    audit_logs,
+    health,
+)
+from app.telephony.webhooks import incoming as telephony_incoming
 
 from app.core.config import settings
 from app.core.logging import setup_logging, logger
