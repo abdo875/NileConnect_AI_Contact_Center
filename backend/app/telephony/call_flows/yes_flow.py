@@ -12,10 +12,9 @@ from app.core.constants import CallOutcome, CaseStatus, FollowupResult, Followup
 from app.repositories.call_repository import CallRepository
 from app.repositories.case_repository import CaseRepository
 from app.repositories.followup_repository import FollowupRepository
-from app.telephony.twilio.response import build_resolved_response
  
  
-def handle_yes(db: Session, followup_id, call_id) -> str:
+def handle_yes(db: Session, followup_id, call_id) -> None:
     followup_repo = FollowupRepository(db)
     call_repo = CallRepository(db)
     case_repo = CaseRepository(db)
@@ -41,6 +40,4 @@ def handle_yes(db: Session, followup_id, call_id) -> str:
             case.status = CaseStatus.RESOLVED
             case.resolved_at = now
             case_repo.update(case)
- 
-    return build_resolved_response()
  

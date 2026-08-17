@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.telephony.webhooks import incoming as telephony_incoming
+from app.telephony.vonage import webhook as vonage_webhook
 
 from app.core.config import settings
 from app.core.logging import setup_logging, logger
@@ -99,6 +100,8 @@ app.include_router(reports.router,            prefix=PREFIX, tags=["Reports"])
 app.include_router(audit_logs.router,         prefix=PREFIX, tags=["Audit Logs"])
 app.include_router(ai.router,                prefix=PREFIX, tags=["AI Assistant"])
 app.include_router(telephony_incoming.router, prefix=PREFIX, tags=["Telephony"])
+app.include_router(vonage_webhook.router,     prefix=PREFIX, tags=["Vonage Telephony"])
+
 app.include_router(success_metrics.router,    prefix=PREFIX, tags=["Success Metrics"])
 
 

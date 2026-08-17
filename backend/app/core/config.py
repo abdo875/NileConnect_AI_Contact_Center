@@ -66,6 +66,15 @@ class Settings(BaseSettings):
     def allowed_origins_list(self) -> List[str]:
         return [o.strip() for o in self.ALLOWED_ORIGINS.split(",")]
 
+    # ── Telephony — Vonage ────────────────────────────────────────────────────────
+    # Application ID (public) — safe to put in .env.example
+    VONAGE_APPLICATION_ID: str = ""
+    # Path to the private key FILE — content is never stored in env
+    VONAGE_PRIVATE_KEY_PATH: str = ""
+    # Fixed caller/callee numbers — not the customer's number
+    VONAGE_FROM_NUMBER: str = ""
+    VONAGE_TO_NUMBER: str = ""
+
     model_config = {"env_file": ".env", "case_sensitive": True, "extra": "ignore"}
 
 
