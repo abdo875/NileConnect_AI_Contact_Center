@@ -61,8 +61,13 @@ async def lifespan(app: FastAPI):
     import threading
     threading.Thread(target=_warm_rag, daemon=True, name="rag-startup").start()
 
+    # ── Auto-tunnel ─────────────────────────────────────────────────────────
+    from app.core.tunnel import start_auto_tunnel, stop_auto_tunnel
+    start_auto_tunnel()
+
     yield
 
+    stop_auto_tunnel()
     logger.info("Backend shutting down.")
 
 
