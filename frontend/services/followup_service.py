@@ -22,3 +22,8 @@ def create_followup(data: dict):
 
 def update_followup(followup_id: str, data: dict):
     return api_client.patch(f"/followups/{followup_id}", data)
+
+
+def call_now_followup(followup_id: str):
+    """Immediately places a Vonage AI call for this follow-up (no scheduler wait)."""
+    return api_client.post(f"/vonage/call-now/{followup_id}", {})

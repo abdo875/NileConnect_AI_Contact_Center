@@ -1,6 +1,10 @@
 
 # Environment variables
 *.env
+
+# Private keys — never commit these
+*.key
+*.pem
     
 # Python virtual environments
 **/venv/
