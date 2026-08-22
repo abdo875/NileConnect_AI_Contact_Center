@@ -58,13 +58,13 @@ def place_vonage_followup_call(db: Session, followup_id: UUID) -> Call:
     followup_repo.update(followup)
 
     # ── 3. Build NCCO inline ──────────────────────────────────────────────────
-    # The speech eventUrl (for capturing the customer's reply) needs to be
+    # The recording eventUrl (for capturing the customer's audio) needs to be
     # reachable by Vonage. Use ngrok / public URL in PUBLIC_BASE_URL for that.
-    input_webhook_url = (
-        f"{settings.PUBLIC_BASE_URL}/api/v1/vonage/input"
+    recording_webhook_url = (
+        f"{settings.PUBLIC_BASE_URL}/api/v1/vonage/recording"
         f"?followup_id={followup_id}&call_id={created_call.id}&attempt=1"
     )
-    ncco = build_greeting_ncco(input_webhook_url)
+    ncco = build_greeting_ncco(recording_webhook_url)
 
     # ── 4. Place the call with inline NCCO ───────────────────────────────────
     from_number = get_from_number()

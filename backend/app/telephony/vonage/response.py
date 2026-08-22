@@ -47,10 +47,10 @@ NO_INPUT_TEXT = (
 
 # ── NCCO builders ──────────────────────────────────────────────────────────────
 
-def build_greeting_ncco(input_webhook_url: str) -> list[dict[str, Any]]:
+def build_greeting_ncco(recording_webhook_url: str) -> list[dict[str, Any]]:
     """
-    Initial NCCO: plays the greeting question and listens for Arabic speech.
-    Vonage POSTs the speech result to `input_webhook_url`.
+    Initial NCCO: plays the greeting question and records customer's Arabic speech.
+    Vonage POSTs the recording result to `recording_webhook_url`.
     """
     return [
         {
@@ -60,25 +60,21 @@ def build_greeting_ncco(input_webhook_url: str) -> list[dict[str, Any]]:
             "bargeIn": True,
         },
         {
-            "action": "input",
-            "type": ["speech"],
-            "eventUrl": [input_webhook_url],
+            "action": "record",
+            "eventUrl": [recording_webhook_url],
             "eventMethod": "POST",
-            "speech": {
-                "language": LANGUAGE,
-                "startTimeout": 15,
-                "endOnSilence": 2,
-                "maxDuration": 20,
-                "sensitivity": 80,
-            },
+            "endOnSilence": 2,
+            "timeOut": 15,
+            "beepStart": False,
+            "format": "mp3",
         },
     ]
 
 
-def build_retry_ncco(input_webhook_url: str) -> list[dict[str, Any]]:
+def build_retry_ncco(recording_webhook_url: str) -> list[dict[str, Any]]:
     """
-    Retry NCCO: plays clarification prompt then listens again.
-    Used when the classifier couldn't determine YES or NO.
+    Retry NCCO: plays clarification prompt then records customer's speech again.
+    Used when Whisper / classifier couldn't determine YES or NO.
     """
     return [
         {
@@ -88,17 +84,13 @@ def build_retry_ncco(input_webhook_url: str) -> list[dict[str, Any]]:
             "bargeIn": True,
         },
         {
-            "action": "input",
-            "type": ["speech"],
-            "eventUrl": [input_webhook_url],
+            "action": "record",
+            "eventUrl": [recording_webhook_url],
             "eventMethod": "POST",
-            "speech": {
-                "language": LANGUAGE,
-                "startTimeout": 10,
-                "endOnSilence": 2,
-                "maxDuration": 15,
-                "sensitivity": 80,
-            },
+            "endOnSilence": 2,
+            "timeOut": 15,
+            "beepStart": False,
+            "format": "mp3",
         },
     ]
 

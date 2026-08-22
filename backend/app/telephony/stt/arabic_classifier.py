@@ -10,7 +10,7 @@ from app.core.constants import FollowupResult
 # ── YES keywords ───────────────────────────────────────────────────────────────
 YES_KEYWORDS = [
     # Egyptian dialect
-    "ايوه", "ايوا", "اه", "اه",
+    "ايوه", "ايوا", "أيوه", "أيوة", "ايوة", "اه", "آه",
     # MSA
     "نعم", "صح", "صحيح",
     # Resolution words
@@ -46,7 +46,6 @@ def _normalize(text: str) -> str:
     - Lowercase
     - Remove diacritics (tashkeel) and punctuation
     - Unify taa marbuta (ة → ه) — very common variant in typed/STT text
-    - Do NOT normalize alef variants here (breaks مش/ما/مش)
     """
     text = text.strip().lower()
     # Remove punctuation
@@ -58,6 +57,18 @@ def _normalize(text: str) -> str:
     # Collapse multiple spaces
     text = re.sub(r"\s+", " ", text).strip()
     return text
+
+
+def _matches_keywords(text: str, words: set[str], keywords: list[str]) -> bool:
+    """Checks if any phrase or standalone word keyword is matched in text."""
+    for kw in keywords:
+        if " " in kw:
+            if kw in text:
+                return True
+        else:
+            if kw in words:
+                return True
+    return False
 
 
 def classify_response(speech_text: str) -> FollowupResult:
@@ -75,17 +86,18 @@ def classify_response(speech_text: str) -> FollowupResult:
         return FollowupResult.UNKNOWN
 
     normalized = _normalize(speech_text)
+    words = set(normalized.split())
 
-    has_no  = any(kw in normalized for kw in NO_KEYWORDS)
-    has_yes = any(kw in normalized for kw in YES_KEYWORDS)
-    has_msh = MSH_WORD in normalized
+    has_no = _matches_keywords(normalized, words, NO_KEYWORDS)
+    has_yes = _matches_keywords(normalized, words, YES_KEYWORDS)
+    has_msh = MSH_WORD in words
 
     # مش + YES_word → NO  (e.g. "مش اتحلت", "مش شغال", "مش تمام")
     msh_negates_yes = has_msh and has_yes
     # مش + unknown word → UNKNOWN  (e.g. "مش عارف", "مش فاهم")
     msh_alone = has_msh and not has_yes and not has_no
 
-    is_no  = has_no or msh_negates_yes
+    is_no = has_no or msh_negates_yes
     is_yes = has_yes and not has_no and not has_msh
 
     if is_no and not (msh_alone):

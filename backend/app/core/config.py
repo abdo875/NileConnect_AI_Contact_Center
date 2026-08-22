@@ -19,9 +19,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
 
     # Database
-    # DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/nileconnect"
-    # Database
-    DATABASE_URL: str
+    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/nileconnect"
     # JWT
     SECRET_KEY: str = "change-me-to-a-long-random-secret-key"
     ALGORITHM: str = "HS256"
@@ -43,6 +41,7 @@ class Settings(BaseSettings):
     # ── AI / LLM ──────────────────────────────────────────────────────────────
     GROQ_API_KEY: str = ""
     GROQ_MODEL: str = "openai/gpt-oss-20b"
+    WHISPER_MODEL: str = "whisper-large-v3-turbo"
     TAVILY_API_KEY: str = ""
 
     # ── RAG ───────────────────────────────────────────────────────────────────
